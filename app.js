@@ -6,7 +6,7 @@ let path = require("path");
 let { open } = require("sqlite");
 let db = null;
 
-let dbpath = path.join(__dirname, "movieData.db");
+let dbpath = path.join(__dirname, "moviesData.db");
 let initializeDBAndServer = async () => {
   try {
     db = await open({
@@ -23,6 +23,7 @@ let initializeDBAndServer = async () => {
 };
 
 initializeDBAndServer();
+
 const convertDbObjectToResponseObject = (dbObject) => {
   return {
     movieName: dbObject.movie_name,
@@ -115,5 +116,49 @@ app.delete("/movies/:movieId/", async (request, response) => {
   response.send("Movie Removed");
 });
 
+const convertDbObjectToResponseObject1 = (dbObject) => {
+  return {
+    directorId: dbObject.director_id,
+    directorName: dbObject.director_name,
+  };
+};
+
+//get
+app.get("/directors/", async (request, response) => {
+  const getPlayersQuery = `
+ SELECT
+ *
+ FROM
+ director;`;
+  const playersArray = await db.all(getPlayersQuery);
+
+  response.send(
+    playersArray.map((eachPlayer) =>
+      convertDbObjectToResponseObject1(eachPlayer)
+    )
+  );
+});
+
+const convertDbObjectToResponseObject2 = (dbObject) => {
+  return {
+    movieName: dbObject.movie_name,
+  };
+};
+
+//get
+app.get("/directors/:directorId/movies/", async (request, response) => {
+  const getPlayersQuery = `
+ SELECT
+ *
+ FROM
+ director;`;
+  const playersArray = await db.all(getPlayersQuery);
+
+  response.send(
+    playersArray.map((eachPlayer) =>
+      convertDbObjectToResponseObject2(eachPlayer)
+    )
+  );
+});
 module.exports = app;
 
