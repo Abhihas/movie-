@@ -32,3 +32,10 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3002/movies/6/
+
+###
+GET http://localhost:3002/directors/
+
+###
+GET http://localhost:3002/directors/1/movies/
+
